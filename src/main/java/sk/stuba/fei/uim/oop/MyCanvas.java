@@ -1,52 +1,41 @@
 package sk.stuba.fei.uim.oop;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 
-public class MyCanvas extends Canvas implements KeyListener,MouseListener {
-    Canvas c;
+public class MyCanvas extends Canvas implements MouseListener {
     private int xp;
     private int yp;
+    private int x;
+    private int y;
+    private Cell[][] array;
+    private Maze maze=new Maze();
 
-    public int getXp() {
-        return xp;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
-    }
-
-    public int getYp() {
-        return yp;
-    }
-
-    public void setYp(int yp) {
-        this.yp = yp;
-    }
 
     public MyCanvas() {
         setXp(50);
         setYp(0);
+        setArray(maze.getDavamSemCells());
     }
 
 
+    public void reset(){
+        maze=new Maze();
+        repaint();
+    }
 
     public void vymazanieGulocky(){
 
         getGraphics().setColor(Color.WHITE);
-        getGraphics().fillOval(xp,yp,20,20);
+        getGraphics().fillRect(xp,yp,20,20);
 
-
-        /*setColor(Color.WHITE);
-        fillOval(xp, yp, 20, 20);*/
     }
 
     public void nakreslenieGulocky(){
 
         getGraphics().setColor(Color.BLACK);
-        getGraphics().fillOval(xp,yp,20,20);
+        getGraphics().fillRect(xp,yp,20,20);
         repaint();
 
 
@@ -57,62 +46,21 @@ public class MyCanvas extends Canvas implements KeyListener,MouseListener {
         super.paint(g);
         g.setColor(Color.WHITE);
         g.fillRect(50,0,650,650);
+
+        g.setColor(Color.CYAN);
+        g.fillRect(50,0,50,50);
+        g.setColor(Color.RED);
+        g.fillRect(650,600,50,50);
         getGraphics().setColor(Color.BLACK);
-        getGraphics().fillOval(xp,yp,20,20);
+        getGraphics().fillOval(xp+12,yp+12,25,25);
 
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        /*if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if ((xp + 50) <= 640) {
-                vymazanieGulocky();
-                xp += 50;
-                nakreslenieGulocky();
-                c.repaint();
-                System.out.println("Vpravo");
-
+        for (int i=0;i<13;i++){
+            for (int j=0;j<13;j++){
+                maze.nakresli(i,j,g);
             }
         }
 
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            if ((xp - 50) >= 0) {
-                vymazanieGulocky();
-                xp -= 50;
-                nakreslenieGulocky();
-                c.repaint();
 
-            }
-        }
-
-        else if (e.getKeyCode() == KeyEvent.VK_UP) {
-            if ((yp - 50) >= 0) {
-                vymazanieGulocky();
-                yp -= 50;
-                nakreslenieGulocky();
-                c.repaint();
-
-            }
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            if ((yp + 50) <= 640) {
-                System.out.println("DOLE");
-                vymazanieGulocky();
-                yp += 50;
-                nakreslenieGulocky();
-                c.repaint();
-            }
-        }*/
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
 
     }
 
@@ -139,5 +87,25 @@ public class MyCanvas extends Canvas implements KeyListener,MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void setArray(Cell[][] array) {
+        this.array = array;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public int getYp() {
+        return yp;
+    }
+
+    public void setYp(int yp) {
+        this.yp = yp;
     }
 }

@@ -1,7 +1,7 @@
 package sk.stuba.fei.uim.oop;
 
-import lombok.Getter;
-import lombok.Setter;
+
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +13,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 
-@Getter
-@Setter
+
+
 public class Aplikacia implements ActionListener, KeyListener {
     private JPanel menu;
     private JPanel okno;
@@ -40,9 +40,6 @@ public class Aplikacia implements ActionListener, KeyListener {
         menu = new JPanel();
 
 
-        /*g=canvas.getGraphics();
-        canvas.gulicka(g);
-*/
 
 
         resetHry = new JButton("Reset");
@@ -53,23 +50,16 @@ public class Aplikacia implements ActionListener, KeyListener {
         tlacitkoVlavo = new JButton("Vlavo");
         xp = 0;
         yp = 0;
-        /*bludisko = new BufferedImage(640, 640, BufferedImage.TYPE_INT_RGB);
-        g = bludisko.getGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 640, 640);
-        plochaNaKreslenie = new JLabel(new ImageIcon(bludisko));*/
+
 
         aplikacia.setTitle("Veza v bludisku");
         aplikacia.setSize(800, 800);
         aplikacia.setResizable(false);
-        //aplikacia.setVisible(true);
         aplikacia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         aplikacia.setLayout(new BorderLayout());
-        //aplikacia.add(okno, BorderLayout.CENTER);
         aplikacia.add(menu, BorderLayout.SOUTH);
 
-        //okno.add(plochaNaKreslenie);
-        //okno.add(canvas);
+
 
         menu.setLayout(new GridLayout(2, 3));
         menu.add(resetHry);
@@ -85,17 +75,13 @@ public class Aplikacia implements ActionListener, KeyListener {
         canvas.requestFocus();
         canvas.addKeyListener(this);
 
-        /*g.setColor(Color.BLACK);
-        g.fillOval(xp, yp, 20, 20);*/
 
         tlacitkoDole.addActionListener(this);
         tlacitkoVpravo.addActionListener(this);
         tlacitkoVlavo.addActionListener(this);
         tlacitkoHore.addActionListener(this);
         resetHry.addActionListener(this);
-        /*okno.addKeyListener(this);
-        okno.setFocusable(true);
-        okno.requestFocus();*/
+
 
         tlacitkoHore.setFocusable(false);
         tlacitkoDole.setFocusable(false);
@@ -162,6 +148,9 @@ public class Aplikacia implements ActionListener, KeyListener {
             canvas.setXp(50);
             canvas.setYp(0);
             canvas.nakreslenieGulocky();
+            canvas.reset();
+
+
 
         }
 
