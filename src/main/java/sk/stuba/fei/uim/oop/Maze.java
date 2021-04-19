@@ -8,8 +8,7 @@ public class Maze {
     private int rows;
     private int cols;
     private int w = 50;
-    private Cell davamSemCells[][] = new Cell[13][13];
-    private int dokopy = 0;
+    private Cell[][] davamSemCells = new Cell[13][13];
     private Cell currentCell = new Cell();
     private int cislo;
     private Cell[] neighbours = new Cell[4];
@@ -31,9 +30,13 @@ public class Maze {
             }
         }
         setCurrentCell(davamSemCells[0][0]);
-        //currentCell=davamSemCells[0][0];
         dfs(currentCell);
     }
+
+    public boolean overenieStien(int xp, int yp,int index){
+        return davamSemCells[xp][yp].getWalls(index);
+    }
+
 
     public void nakresli(int i, int j, Graphics g) {
         int xp = i * 50 + 50;
@@ -57,10 +60,7 @@ public class Maze {
             g.drawLine(xp, yp + 50, xp, yp);
         }
 
-        /*if (davamSemCells[i][j].isVisited()) {
-            g.setColor(Color.GREEN);
-            g.fillOval(xp, yp, 20, 20);
-        }*/
+
     }
 
 

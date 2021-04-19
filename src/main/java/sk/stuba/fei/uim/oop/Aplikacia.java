@@ -1,8 +1,6 @@
 package sk.stuba.fei.uim.oop;
 
 
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Canvas;
@@ -13,43 +11,40 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 
-
-
 public class Aplikacia implements ActionListener, KeyListener {
     private JPanel menu;
-    private JPanel okno;
     private JFrame aplikacia;
-    private JLabel pocetVyriesenych;
+    private JLabel pocetVyriesenych = new JLabel();
     private JButton resetHry;
     private JButton tlacitkoHore;
     private JButton tlacitkoDole;
     private JButton tlacitkoVpravo;
     private JButton tlacitkoVlavo;
-    private BufferedImage bludisko;
-    private Graphics g;
-    private JLabel plochaNaKreslenie;
-    private GridBagConstraints gbc;
-    private int xp;
-    private int yp;
     private MyCanvas canvas = new MyCanvas();
+    private int vyriesene;
+    private int i;
+    private int j;
 
+
+    /*public Aplikacia(int reset){
+        i=0;
+        j=0;
+    }*/
 
     public Aplikacia() {
         aplikacia = new JFrame();
-        okno = new JPanel();
         menu = new JPanel();
-
-
+        vyriesene = 0;
+        i = 0;
+        j = 0;
 
 
         resetHry = new JButton("Reset");
-        pocetVyriesenych = new JLabel("Pocet vyriesenych:");
+        pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
         tlacitkoHore = new JButton("Hore");
         tlacitkoDole = new JButton("Dole");
         tlacitkoVpravo = new JButton("Vpravo");
         tlacitkoVlavo = new JButton("Vlavo");
-        xp = 0;
-        yp = 0;
 
 
         aplikacia.setTitle("Veza v bludisku");
@@ -58,7 +53,6 @@ public class Aplikacia implements ActionListener, KeyListener {
         aplikacia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         aplikacia.setLayout(new BorderLayout());
         aplikacia.add(menu, BorderLayout.SOUTH);
-
 
 
         menu.setLayout(new GridLayout(2, 3));
@@ -99,38 +93,52 @@ public class Aplikacia implements ActionListener, KeyListener {
 
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if ((canvas.getXp() + 50) <= 650) {
-                canvas.vymazanieGulocky();
-                canvas.setXp(canvas.getXp()+50);
-                canvas.nakreslenieGulocky();
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 1));
+            if (!stena) {
+                if ((canvas.getXp() + 50) <= 650) {
+                    canvas.vymazanieGulocky();
+                    canvas.setXp(canvas.getXp() + 50);
+                    if (canvas.getXp() == 650 && canvas.getYp() == 600) {
+                        vyriesene++;
+                        pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
+                        pocetVyriesenych.repaint();
+                    }
+                    canvas.nakreslenieGulocky();
 
-                //System.out.println("Vpravo");
-
+                }
             }
-        }
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 3));
+            if (!stena) {
+                if ((canvas.getXp() - 50) >= 50) {
+                    canvas.vymazanieGulocky();
+                    canvas.setXp(canvas.getXp() - 50);
+                    canvas.nakreslenieGulocky();
 
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            if ((canvas.getXp() - 50) >= 50) {
-                canvas.vymazanieGulocky();
-                canvas.setXp(canvas.getXp()-50);
-                canvas.nakreslenieGulocky();
-
+                }
             }
-        }
-
-        else if (e.getKeyCode() == KeyEvent.VK_UP) {
-            if ((canvas.getYp() - 50) >= 0) {
-                canvas.vymazanieGulocky();
-                canvas.setYp(canvas.getYp()-50);
-                canvas.nakreslenieGulocky();
-
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 0));
+            if (!stena) {
+                if ((canvas.getYp() - 50) >= 0) {
+                    canvas.vymazanieGulocky();
+                    canvas.setYp(canvas.getYp() - 50);
+                    canvas.nakreslenieGulocky();
+                }
             }
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            if ((canvas.getYp() + 50) <= 640) {
-                canvas.vymazanieGulocky();
-                canvas.setYp(canvas.getYp()+50);
-                canvas.nakreslenieGulocky();
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 2));
+            if (!stena) {
+                if ((canvas.getYp() + 50) <= 600) {
+                    canvas.vymazanieGulocky();
+                    canvas.setYp(canvas.getYp() + 50);
+                    if (canvas.getXp() == 650 && canvas.getYp() == 600) {
+                        vyriesene++;
+                        pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
+                        pocetVyriesenych.repaint();
+                    }
+                    canvas.nakreslenieGulocky();
+                }
             }
         }
     }
@@ -144,57 +152,94 @@ public class Aplikacia implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == resetHry) {
-            canvas.vymazanieGulocky();
-            canvas.setXp(50);
-            canvas.setYp(0);
-            canvas.nakreslenieGulocky();
+            vyriesene = 0;
+            i = 0;
+            j = 0;
+            pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
             canvas.reset();
-
-
-
         }
 
 
         if (e.getSource() == tlacitkoDole) {
-            if ((canvas.getYp() + 50) <= 640) {
-                canvas.vymazanieGulocky();
-                canvas.setYp(canvas.getYp()+50);
-                canvas.nakreslenieGulocky();
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 2));
+            if (!stena) {
+                if ((canvas.getYp() + 50) <= 640) {
+                    canvas.vymazanieGulocky();
+                    canvas.setYp(canvas.getYp() + 50);
+                    if (canvas.getXp() == 650 && canvas.getYp() == 600) {
+                        vyriesene++;
+                        pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
+                        pocetVyriesenych.repaint();
+                    }
+                    canvas.nakreslenieGulocky();
 
+                }
             }
         }
 
         if (e.getSource() == tlacitkoHore) {
-            if ((canvas.getYp() - 50) >= 0) {
-                canvas.vymazanieGulocky();
-                canvas.setYp(canvas.getYp()-50);
-                canvas.nakreslenieGulocky();
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 0));
+            if (!stena) {
+                if ((canvas.getYp() - 50) >= 0) {
+                    canvas.vymazanieGulocky();
+                    canvas.setYp(canvas.getYp() - 50);
+                    canvas.nakreslenieGulocky();
 
-
+                }
             }
         }
 
         if (e.getSource() == tlacitkoVlavo) {
-            if ((canvas.getXp() - 50) >= 50) {
-                canvas.vymazanieGulocky();
-                canvas.setXp(canvas.getXp()-50);
-                canvas.nakreslenieGulocky();
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 3));
+            if (!stena) {
+                if ((canvas.getXp() - 50) >= 50) {
+                    canvas.vymazanieGulocky();
+                    canvas.setXp(canvas.getXp() - 50);
+                    canvas.nakreslenieGulocky();
 
-
-
+                }
             }
         }
 
         if (e.getSource() == tlacitkoVpravo) {
-            if ((canvas.getXp() + 50) <= 650) {
-                canvas.vymazanieGulocky();
-                //xp += 50;
-                canvas.setXp(canvas.getXp()+50);
-                canvas.nakreslenieGulocky();
+            boolean stena = (canvas.kontrolaSteny(((canvas.getXp() / 50) - 1), canvas.getYp() / 50, 1));
+            if (!stena) {
+                if ((canvas.getXp() + 50) <= 650) {
+                    canvas.vymazanieGulocky();
+                    canvas.setXp(canvas.getXp() + 50);
+                    if (canvas.getXp() == 650 && canvas.getYp() == 600) {
+                        vyriesene++;
+                        pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
+                        pocetVyriesenych.repaint();
+                    }
+                    canvas.nakreslenieGulocky();
 
-
-
+                }
             }
         }
+    }
+
+    public int getVyriesene() {
+        return vyriesene;
+    }
+
+    public void setVyriesene(int vyriesene) {
+        this.vyriesene = vyriesene;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
+    public int getJ() {
+        return j;
+    }
+
+    public void setJ(int j) {
+        this.j = j;
     }
 }

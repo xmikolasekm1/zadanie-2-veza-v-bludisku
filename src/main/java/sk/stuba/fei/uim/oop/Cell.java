@@ -15,9 +15,7 @@ public class Cell {
         this.i = i;
         this.j = j;
         visited=false;
-        for (int m = 0; m < walls.length; m++) {
-                walls[m] = true;
-        }
+        Arrays.fill(walls,true);
     }
 
     public void setVisited(boolean visited) {
@@ -38,6 +36,10 @@ public class Cell {
 
     public boolean[] getWalls() {
         return walls;
+    }
+
+    public boolean getWalls(int index){
+        return walls[index];
     }
 
     public void setWalls(int i,boolean walls) {

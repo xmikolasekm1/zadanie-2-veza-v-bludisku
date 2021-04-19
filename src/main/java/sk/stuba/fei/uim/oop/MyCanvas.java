@@ -7,20 +7,26 @@ import java.awt.event.*;
 public class MyCanvas extends Canvas implements MouseListener {
     private int xp;
     private int yp;
-    private int x;
-    private int y;
-    private Cell[][] array;
     private Maze maze=new Maze();
 
 
     public MyCanvas() {
         setXp(50);
         setYp(0);
-        setArray(maze.getDavamSemCells());
+        addMouseListener(this);
+    }
+
+
+    public boolean kontrolaSteny(int i, int j,int index){
+        return maze.overenieStien(i,j,index);
     }
 
 
     public void reset(){
+        vymazanieGulocky();
+        setXp(50);
+        setYp(0);
+        nakreslenieGulocky();
         maze=new Maze();
         repaint();
     }
@@ -36,7 +42,12 @@ public class MyCanvas extends Canvas implements MouseListener {
 
         getGraphics().setColor(Color.BLACK);
         getGraphics().fillRect(xp,yp,20,20);
+        if (getXp()==650 && getYp()==600){
+            reset();
+
+        }
         repaint();
+
 
 
     }
@@ -66,7 +77,7 @@ public class MyCanvas extends Canvas implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        System.out.println("AHOJ");
     }
 
     @Override
@@ -87,10 +98,6 @@ public class MyCanvas extends Canvas implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-
-    public void setArray(Cell[][] array) {
-        this.array = array;
     }
 
     public int getXp() {
