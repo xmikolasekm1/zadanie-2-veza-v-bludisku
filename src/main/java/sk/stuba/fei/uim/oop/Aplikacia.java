@@ -49,7 +49,7 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
         resetHry.addActionListener(this);
 
         canvas.addMouseListener(this);
-//        canvas.addMouseMotionListener(this);
+
 
         aplikacia.setVisible(true);
     }
@@ -239,7 +239,6 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
                     canvas.setCiel(false);
                     vyriesene++;
                     pocetVyriesenych.setText("Pocet vyriesenych:" + vyriesene);
-                    System.out.println("Pocet vyriesenych:" + vyriesene);
                     pocetVyriesenych.repaint();
                 }
             }
@@ -262,17 +261,6 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
 
     }
 
-    /*@Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        int x=e.getX();
-        int y=e.getY();
-        canvas.vyznacenieMoznehoPohybu(x,y);
-    }*/
 
 
 }
