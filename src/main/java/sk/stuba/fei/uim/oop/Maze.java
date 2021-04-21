@@ -5,36 +5,36 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Maze {
-    private int rows;
-    private int cols;
-    private int w = 50;
-    private Cell[][] davamSemCells = new Cell[13][13];
-    private Cell currentCell = new Cell();
+    private int riadok;
+    private int stlpec;
+    private int sirka = 50;
+    private Cell[][] poleVsetkychCells = new Cell[13][13];
+    private Cell aktualnaCell = new Cell();
     private int cislo;
-    private Cell[] neighbours = new Cell[4];
-    private Cell top = new Cell();
-    private Cell right = new Cell();
-    private Cell bottom = new Cell();
-    private Cell left = new Cell();
+    private Cell[] susedneCells = new Cell[4];
+    private Cell hore = new Cell();
+    private Cell vpravo = new Cell();
+    private Cell dole = new Cell();
+    private Cell vlavo = new Cell();
     private int pozicia;
     private Stack<Cell> stack=new Stack<>();
 
     public Maze() {
-        rows = 650 / w;
-        cols = 650 / w;
+        riadok = 650 / sirka;
+        stlpec = 650 / sirka;
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < riadok; i++) {
+            for (int j = 0; j < stlpec; j++) {
                 Cell cell = new Cell(i, j);
-                davamSemCells[i][j] = cell;
+                poleVsetkychCells[i][j] = cell;
             }
         }
-        setCurrentCell(davamSemCells[0][0]);
-        dfs(currentCell);
+        setAktualnaCell(poleVsetkychCells[0][0]);
+        dfs(aktualnaCell);
     }
 
     public boolean overenieStien(int xp, int yp,int index){
-        return davamSemCells[xp][yp].getWalls(index);
+        return poleVsetkychCells[xp][yp].getWalls(index);
     }
 
 
@@ -42,7 +42,7 @@ public class Maze {
         int xp = i * 50 + 50;
         int yp = j * 50;
 
-        boolean[] walls = davamSemCells[i][j].getWalls();
+        boolean[] walls = poleVsetkychCells[i][j].getSteny();
         if (walls[0]) {
             g.setColor(Color.BLACK);
             g.drawLine(xp, yp, xp + 50, yp);
@@ -65,94 +65,95 @@ public class Maze {
 
 
     public int dfs(Cell currentCell) {
-        currentCell.setVisited(true);
+        currentCell.setNavstivene(true);
         Random rand = new Random();
 
-        top=null;
-        right=null;
-        bottom=null;
-        left=null;
+        hore =null;
+        vpravo =null;
+        dole =null;
+        vlavo =null;
 
 
         if (currentCell.getI() == 0 && (currentCell.getJ() >= 0 && currentCell.getJ() <= 12)) { //prvy riadok
             if (currentCell.getJ() == 0) {
-                right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
-                bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
+                vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
+                dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
             }
             else if (currentCell.getJ() > 0 && currentCell.getJ() < 12) {
-                right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
-                bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
-                left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+                vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
+                dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
+                vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
             }
             else if (currentCell.getJ() == 12) {
-                bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
-                left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+                dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
+                vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
             }
 
         } else if (currentCell.getJ() == 0 && (currentCell.getI() > 0 && currentCell.getI() <= 12)) {   //nalavo stlpec
             if (currentCell.getI() == 12) {
-                top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-                right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
+                hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+                vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
             }
             else if (currentCell.getI()>0 && currentCell.getI()<12){
-                top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-                right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
-                bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
+                hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+                vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
+                dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
             }
-        } else if (currentCell.getI() == 12 && (currentCell.getJ()>0 && currentCell.getJ() <= 12)) {
+
+        } else if (currentCell.getI() == 12 && (currentCell.getJ()>0 && currentCell.getJ() <= 12)) {        //posledny riadok
             if (currentCell.getJ()==12){
-                top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-                left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+                hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+                vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
             }
             else if (currentCell.getJ()>0 && currentCell.getJ()<12){
-                top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-                right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
-                left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+                hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+                vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
+                vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
             }
         }
-        else if(currentCell.getJ()==12 &&(currentCell.getI()>0 && currentCell.getI()<12)){
-            top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-            bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
-            left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+        else if(currentCell.getJ()==12 &&(currentCell.getI()>0 && currentCell.getI()<12)){          //pravy stlpec
+            hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+            dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
+            vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
         }
 
         else {
-            top = davamSemCells[currentCell.getI() - 1][currentCell.getJ()];
-            right = davamSemCells[currentCell.getI()][currentCell.getJ() + 1];
-            bottom = davamSemCells[currentCell.getI() + 1][currentCell.getJ()];
-            left = davamSemCells[currentCell.getI()][currentCell.getJ() - 1];
+            hore = poleVsetkychCells[currentCell.getI() - 1][currentCell.getJ()];
+            vpravo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() + 1];
+            dole = poleVsetkychCells[currentCell.getI() + 1][currentCell.getJ()];
+            vlavo = poleVsetkychCells[currentCell.getI()][currentCell.getJ() - 1];
         }
 
         setPozicia(0);
 
-        if (top != null && !top.isVisited()) {
-            neighbours[getPozicia()] = top;
+        if (hore != null && !hore.isNavstivene()) {
+            susedneCells[getPozicia()] = hore;
             setPozicia(getPozicia() + 1);
         }
 
-        if (right != null && !right.isVisited()) {
-            neighbours[getPozicia()] = right;
+        if (vpravo != null && !vpravo.isNavstivene()) {
+            susedneCells[getPozicia()] = vpravo;
             setPozicia(getPozicia() + 1);
         }
 
-        if (bottom != null && !bottom.isVisited()) {
-            neighbours[getPozicia()] = bottom;
+        if (dole != null && !dole.isNavstivene()) {
+            susedneCells[getPozicia()] = dole;
             setPozicia(getPozicia() + 1);
         }
 
-        if (left != null && !left.isVisited()) {
-            neighbours[getPozicia()] = left;
+        if (vlavo != null && !vlavo.isNavstivene()) {
+            susedneCells[getPozicia()] = vlavo;
             setPozicia(getPozicia() + 1);
         }
 
         if (getPozicia() > 0) {
             cislo = rand.nextInt(pozicia);
-            neighbours[cislo].setVisited(true);
+            susedneCells[cislo].setNavstivene(true);
             stack.push(currentCell);
 
-            Cell next=neighbours[cislo];
+            Cell next= susedneCells[cislo];
 
-            removeWalls(currentCell,neighbours[cislo]);
+            removeWalls(currentCell, susedneCells[cislo]);
 
             dfs(next);
         }
@@ -187,16 +188,20 @@ public class Maze {
     }
 
 
-    public void setCurrentCell(Cell currentCell) {
-        this.currentCell = currentCell;
+    public void setAktualnaCell(Cell aktualnaCell) {
+        this.aktualnaCell = aktualnaCell;
     }
 
-    public Cell getCurrentCell() {
-        return currentCell;
+    public Cell getAktualnaCell() {
+        return aktualnaCell;
     }
 
-    public Cell[][] getDavamSemCells() {
-        return davamSemCells;
+    public Cell[][] getPoleVsetkychCells() {
+        return poleVsetkychCells;
+    }
+
+    public Cell getDavamSemCells(int x,int y) {
+        return poleVsetkychCells[x][y];
     }
 
     public int getPozicia() {
