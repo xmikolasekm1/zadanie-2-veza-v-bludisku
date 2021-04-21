@@ -11,7 +11,7 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
     private JPanel menu;
     private MyJFrame aplikacia;
     private JLabel pocetVyriesenych = new JLabel();
-    private MyJButton resetHry= new MyJButton("Reset");;
+    private MyJButton resetHry= new MyJButton("Reset");
     private MyJButton tlacitkoHore= new MyJButton("Hore");
     private MyJButton tlacitkoDole= new MyJButton("Dole");
     private MyJButton tlacitkoVpravo= new MyJButton("Vpravo");
@@ -49,6 +49,7 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
         resetHry.addActionListener(this);
 
         canvas.addMouseListener(this);
+//        canvas.addMouseMotionListener(this);
 
         aplikacia.setVisible(true);
     }
@@ -222,6 +223,7 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
         if (canvas.getKliknutie() == 0) {
             if ((e.getX() <= 700 && e.getX() >= 50) && (e.getY() >= 0 && e.getY() <= 650)) {
                 canvas.setPohyb(canvas.vykresliMoznyPohybPoKliknuti(((e.getX() / 50) - 1), (e.getY() / 50)));
+                canvas.setVykreslenie(1);
                 if (canvas.getPohyb()==0){
                     canvas.setKliknutie(0);
                 }
@@ -259,4 +261,18 @@ public class Aplikacia implements ActionListener, KeyListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+    /*@Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int x=e.getX();
+        int y=e.getY();
+        canvas.vyznacenieMoznehoPohybu(x,y);
+    }*/
+
+
 }

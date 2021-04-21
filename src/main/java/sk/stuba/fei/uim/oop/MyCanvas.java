@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 
-public class MyCanvas extends Canvas {
+public class MyCanvas extends Canvas implements MouseMotionListener {
     private int xp;
     private int yp;
     private Maze maze = new Maze();
@@ -13,11 +13,17 @@ public class MyCanvas extends Canvas {
     private int pohyb;
     private ArrayList<Cell> pohybPoKliknuti = new ArrayList<>();
     private boolean ciel;
+    private int xPosVykreslenej;
+    private int yPosVykreslenej;
+    private int vykreslenie;
+    private int xPosRep;
+    private int yPosRep;
 
 
     public MyCanvas() {
         setXp(50);
         setYp(0);
+        addMouseMotionListener(this);
     }
 
 
@@ -87,8 +93,8 @@ public class MyCanvas extends Canvas {
 
 
         while ((!maze.overenieStien(xPos, yPos, 0) && yPos != 0) && (getXp() == xPosition && getYp() == yPosition)) {
-            getGraphics().setColor(Color.BLUE);
-            getGraphics().drawOval(((xPos + 1) * 50) + 12, ((yPos - 1) * 50) + 12, 25, 25);
+            /*getGraphics().setColor(Color.BLUE);
+            getGraphics().drawOval(((xPos + 1) * 50) + 12, ((yPos - 1) * 50) + 12, 25, 25);*/
             yPos--;
             pohybPoKliknuti.add(maze.getDavamSemCells(xPos, yPos));
 
@@ -97,8 +103,8 @@ public class MyCanvas extends Canvas {
         xPos = x;
         yPos = y;
         while (!maze.overenieStien(xPos, yPos, 1) && xPos != 12 && (getXp() == xPosition && getYp() == yPosition)) {
-            getGraphics().setColor(Color.BLUE);
-            getGraphics().drawOval(((xPos + 2) * 50) + 12, ((yPos) * 50) + 12, 25, 25);
+            /*getGraphics().setColor(Color.BLUE);
+            getGraphics().drawOval(((xPos + 2) * 50) + 12, ((yPos) * 50) + 12, 25, 25);*/
             xPos++;
             pohybPoKliknuti.add(maze.getDavamSemCells(xPos, yPos));
 
@@ -107,16 +113,16 @@ public class MyCanvas extends Canvas {
         xPos = x;
         yPos = y;
         while (!maze.overenieStien(xPos, yPos, 2) && yPos != 12 && (getXp() == xPosition && getYp() == yPosition)) {
-            getGraphics().setColor(Color.BLUE);
-            getGraphics().drawOval(((xPos + 1) * 50) + 12, ((yPos + 1) * 50) + 12, 25, 25);
+            /*getGraphics().setColor(Color.BLUE);
+            getGraphics().drawOval(((xPos + 1) * 50) + 12, ((yPos + 1) * 50) + 12, 25, 25);*/
             yPos++;
             pohybPoKliknuti.add(maze.getDavamSemCells(xPos, yPos));
         }
         xPos = x;
         yPos = y;
         while (!maze.overenieStien(xPos, yPos, 3) && xPos != 0 && (getXp() == xPosition && getYp() == yPosition)) {
-            getGraphics().setColor(Color.BLUE);
-            getGraphics().drawOval(((xPos) * 50) + 12, ((yPos) * 50) + 12, 25, 25);
+            /*getGraphics().setColor(Color.BLUE);
+            getGraphics().drawOval(((xPos) * 50) + 12, ((yPos) * 50) + 12, 25, 25);*/
             xPos--;
             pohybPoKliknuti.add(maze.getDavamSemCells(xPos, yPos));
         }
@@ -127,6 +133,9 @@ public class MyCanvas extends Canvas {
 
         return 1;
     }
+
+
+
 
     public void presun(int x, int y) {
         vymazanieGulocky();
@@ -184,6 +193,43 @@ public class MyCanvas extends Canvas {
 
     }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        int xPosition = (x / 50) - 1;
+        int yPosition = y / 50;
+        int xPosVykreslenie = ((xPosition + 1) * 50)+12;
+        int yPosVykreslenie = (yPosition * 50)+12;
+
+        if ((((e.getX() / 50) - 1)!=xPosVykreslenej && (e.getY() / 50)!=yPosVykreslenej) || (((e.getX() / 50) - 1)<xPosVykreslenej && (e.getY() / 50)==yPosVykreslenej) ||
+                (((e.getX() / 50) - 1)>xPosVykreslenej && (e.getY() / 50)==yPosVykreslenej) || (((e.getX() / 50) - 1)==xPosVykreslenej && (e.getY() / 50)<yPosVykreslenej) ||
+                (((e.getX() / 50) - 1)==xPosVykreslenej && (e.getY() / 50)>yPosVykreslenej)) {
+            repaint(xPosRep, yPosRep, 30, 30);
+        }
+        if (vykreslenie==1) {
+            for (Cell cell : pohybPoKliknuti) {
+                if (cell.getI() == xPosition && cell.getJ() == yPosition) {
+                    getGraphics().setColor(Color.BLACK);
+                    getGraphics().drawOval((xPosVykreslenie ), (yPosVykreslenie ), 25, 25);
+                    xPosVykreslenej = xPosition;
+                    yPosVykreslenej = yPosition;
+                    xPosRep=xPosVykreslenie;
+                    yPosRep=yPosVykreslenie;
+
+                }
+            }
+
+        }
+
+
+    }
+
     public int getXp() {
         return xp;
     }
@@ -230,5 +276,13 @@ public class MyCanvas extends Canvas {
 
     public void setCiel(boolean ciel) {
         this.ciel = ciel;
+    }
+
+    public int getVykreslenie() {
+        return vykreslenie;
+    }
+
+    public void setVykreslenie(int vykreslenie) {
+        this.vykreslenie = vykreslenie;
     }
 }
